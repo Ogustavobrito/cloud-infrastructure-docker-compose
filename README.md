@@ -6,9 +6,9 @@ This repository holds the documentation and source files for the assignment of *
 
 ## What is implemented in this project?
 
-The project demonstrates how Docker can be used to build and run containers within a **Linux Virtual Machine** whihc will be deployed in Azure Cloud and illustrate the use of cloud infrastructure and virtualisation technologies.
+In this project you will see how Docker can be used to build and run containers within a **Linux Vrtual Machine** in Azure cloud and ilustrate the use of cloud infrastrucure and virtualisation.
 
-The Docker documentation provides instruction to make a deployment of **multiple containers using Docker Compose**, demonstrating how a containerised environment can be used to define, deploy, and manage multitple services together.
+All the instruction to make a deployment of **multiple containers using Docker Compose** is provided by Docker Documentation, demonstrating how a containerised environment can be used to define, deploy, and manage multitple services together.
 
 ## What is included in this repository?
 
@@ -19,33 +19,37 @@ The repository includes:
 - Documentation describing the setup and deployment process
 - Instructions to reproduce the environment on a cloud virtual machine
 
-------
+---
 
-# Technologies Used
+## Technologies Used
 
 - Docker
-- Docker Compose
 - Microsoft Azure Virtual Machine - Linux (ubuntu 24.04)
 - Git and GitHub for version control
 
 ---
 
-# Prerequisites
-
-Before running this project, ensure the following are installed or available:
+## Prerequisites
 
 - A **Linux Virtual Machine**
 - **Docker Engine installed**
+  - Install Docker using apt:
+  - https://docs.docker.com/engine/install/ubuntu
 - Access to the **terminal / SSH connection**
-- Docker Account for sharing application 
-- Git (optional, for cloning the repository) 
+- **Docker Account** for sharing application
+- **Git** (optional, for cloning the repository)
 
+The image below shows that we are now connected to a Virtual Machine in Azure Cloud via SSH.
 
+![Connected to VM](/images/connected-vm-cloud-ssh.jpg)
 
+Tips:
 
+- When we use Docker commands to interact with the Docker Engine we are required to use "sudo" privileges, because the communication occurs through socket. This socket is owned by the "root" user and the "docker group". In order to run Docker commands without using "sudo", we can add the user to the "docker group" and this grants permission to access the Docker socket.
 
+Run:
+sudo usermod -aG docker `whoami`
 
+After running the command, log out and log in again for the group membership to take effect, now you can try running Docker commands such as "docker ps" without using "sudo".
 
-
-
-
+---
