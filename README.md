@@ -39,7 +39,7 @@ The repository includes:
 - **Docker Account** for sharing application
 - **Git** (optional, for cloning the repository)
 
-The image below shows that we are now connected to a Virtual Machine in Azure Cloud via SSH.
+The image below shows that we are now connected to a Virtual Machine in Azure Cloud via SSH. SSH can be generated on terminal using the command "ssh-keygen", which generate private and public keys, the public key is the one we register on the VM and the private key is the one we use to access the VM.
 
 ![Connected to VM](/images/connected-vm-cloud-ssh.jpg)
 
