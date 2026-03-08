@@ -53,3 +53,51 @@ sudo usermod -aG docker `whoami`
 After running the command, log out and log in again for the group membership to take effect, now you can try running Docker commands such as "docker ps" without using "sudo".
 
 ---
+
+# 1. Containerize an application
+
+Containerization is a software deployment process that bundles an application's code with all the files and libraries it needs to run on any infrastructure.
+
+In this section we are going to run a todo list manager provided by Docker that runs on Node.js.
+
+## Get The APP
+
+Fork the repository rather than cloning, as this avoids the need to push back from the server and free to make any change. Then clone it into the VM.
+
+https://github.com/docker/getting-started-app/tree/main
+
+![get-the-app](/images/get-the-app.jpg)
+
+## Build the app's image
+
+1. We use Dockerfile to build the image. Dockerfile is blue-print that holds a script of insctructions such as, the base of image (e.g. node:24-alpine), sets the working directory, copy source code into the image, dependencies, commands to start the application and port por the application. Docker uses this script to build a container image.
+
+- Go to the repository, change the browser to "dev mode" to make it possible to modifiy and commit the Dockerfile we will create.
+
+- insede Getting-started-app folder, create a file called "Dockerfile" and paste the text:
+
+![dockerfile](/images/dockerfile.jpg)
+
+- save the change, commit and go to the terminal to pull the file running the command "git pull"
+
+2. Build the image
+
+- Building the images is the process of wrapping the instructions from Dockerfile such as, dependencies and the enviroment into the appliction.
+
+- Navegate to the directory where dockerfile is located:
+  - cd getting-started-app
+- Build the image running:
+  - docker build -t getting-started .
+  - -t command tags the image with following name and the dot means it uses the dockerfile in the current direcotry (.).
+
+## Start an app container
+
+Use the command "docker run" to run a container:
+
+- docker run -d -p 8080:3000 getting-started
+
+- The -d flag runs the container in the backgroud, and the -p flag creates a port mapping where 8080 is the port exposed on the VM, while 3000 is the port the applications is listening (defined on Dockerfile)
+
+- Now we can see the application on browser running on port 8080.
+
+![docker-run](/images/docker-run.jpg)
