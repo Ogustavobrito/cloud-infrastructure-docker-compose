@@ -6,9 +6,9 @@ This repository holds the documentation and source files for the assignment of *
 
 ## What is implemented in this project?
 
-In this project you will see how Docker can be used to build and run containers within a **Linux Vrtual Machine** in Azure cloud and ilustrate the use of cloud infrastrucure and virtualisation.
+In this project you will see how Docker can be used to build and run containers within a **Linux Virtual Machine** in Azure cloud and illustrate the use of cloud infrastrucure and virtualisation.
 
-All the instruction to make a deployment of **multiple containers using Docker Compose** is provided by Docker Documentation, demonstrating how a containerised environment can be used to define, deploy, and manage multitple services together.
+All the instruction to make a deployment of **multiple containers using Docker Compose** is provided by Docker Documentation, demonstrating how a containerised environment can be used to define, deploy, and manage multiple services together.
 
 ## What is included in this repository?
 
@@ -41,14 +41,13 @@ The repository includes:
 
 The image below shows that we are now connected to a Virtual Machine in Azure Cloud via SSH. SSH can be generated on terminal using the command "ssh-keygen", which generate private and public keys, the public key is the one we register on the VM and the private key is the one we use to access the VM.
 
-![Connected to VM](/images/connected-vm-cloud-ssh.jpg)
+![Connected-to-VM](/images/connected-vm-cloud-ssh.jpg)
 
 Tips:
 
 - When we use Docker commands to interact with the Docker Engine we are required to use "sudo" privileges, because the communication occurs through socket. This socket is owned by the "root" user and the "docker group". In order to run Docker commands without using "sudo", we can add the user to the "docker group" and this grants permission to access the Docker socket.
 
-Run:
-sudo usermod -aG docker `whoami`
+Run: sudo usermod -aG docker \`whoami\`
 
 After running the command, log out and log in again for the group membership to take effect, now you can try running Docker commands such as "docker ps" without using "sudo".
 
@@ -70,7 +69,7 @@ https://github.com/docker/getting-started-app/tree/main
 
 ## Build the app's image
 
-1. We use Dockerfile to build the image. Dockerfile is blue-print that holds a script of insctructions such as, the base of image (e.g. node:24-alpine), sets the working directory, copy source code into the image, dependencies, commands to start the application and port por the application. Docker uses this script to build a container image.
+1. We use Dockerfile to build the image. Dockerfile is blue-print that holds a script of instructions such as, the base of image (e.g. node:24-alpine), sets the working directory, copy source code into the image, dependencies, commands to start the application and port por the application. Docker uses this script to build a container image.
 
 - Go to the repository, change the browser to "dev mode" to make it possible to modifiy and commit the Dockerfile we will create.
 
@@ -84,11 +83,11 @@ https://github.com/docker/getting-started-app/tree/main
 
 - Building the images is the process of wrapping the instructions from Dockerfile such as, dependencies and the enviroment into the appliction.
 
-- Navegate to the directory where dockerfile is located:
+- Navigate to the directory where dockerfile is located:
   - cd getting-started-app
 - Build the image running:
   - docker build -t getting-started .
-  - -t command tags the image with following name and the dot means it uses the dockerfile in the current direcotry (.).
+  - -t command tags the image with following name and the dot means it uses the dockerfile in the current directory (.).
 
 ## Start an app container
 
@@ -106,7 +105,7 @@ Use the command "docker run" to run a container:
 
 # 2. Update the application
 
-We will change the text displeyd for when there is no item in the list, the currente text is "No items yet! Add one above!", the new text will be "You have no todo items yet! Add one above!".
+We will change the text displayed for when there is no item in the list, the currente text is "No items yet! Add one above!", the new text will be "You have no todo items yet! Add one above!".
 
 - For this we are going to modify src/static/js/app.js.
 
@@ -125,7 +124,7 @@ We will change the text displeyd for when there is no item in the list, the curr
 
 ## Remove a container and Start the updated app container
 
-As the port 8080 is already alocated by the old container we have to stop and remove the old container first and then we can run the new image with the updated text.
+As the port 8080 is already allocated by the old container we have to stop and remove the old container first and then we can run the new image with the updated text.
 
 - Get the Id of the container:
   - docker ps
@@ -141,3 +140,23 @@ As the port 8080 is already alocated by the old container we have to stop and re
 
 ![stop-remove-container](/images/stop-remove-container.jpg)
 ![run-new-image-text-update](/images/run-new-image-text-update.jpg)
+
+# 3. Share the application
+
+We can share a Docker image by using docker registry. Docker Hub is the defualt registry, where we can create repositories and share the application. Lets share the image created on step 2.
+
+## Create a repository
+
+After singing up in Docker Hub, create a repository named "getting-started" and make sure visibility is "Public".
+
+To push an image in to Docker Hub we need to tag the image with Docker ID + repository name using the command "docker tag". Log in Docker Hub to get the docker ID.
+run:
+`docker tag getting-started:latest <docker-id>/getting-started:<newtag>`
+
+Now that we have the new tag, we can push the image in to Ducker hub. Make sure to log in (access token ca be generate on Docker Hub account settings).
+
+![dockerhub-new-tag-for-sharing-image](/images/new-tag-for-sharing-image.jpg)
+
+The image is now on Docker Hub, to test it we will first remove all old images, then use the shared image by pulling it from Docker Hub to run a new container.
+
+![removed-img-pull-img-from-docker-hub](/images/remove-img-pull-img-from-docker-hub.jpg)
