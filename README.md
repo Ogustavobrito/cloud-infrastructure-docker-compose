@@ -101,3 +101,43 @@ Use the command "docker run" to run a container:
 - Now we can see the application on browser running on port 8080.
 
 ![docker-run](/images/docker-run.jpg)
+
+---
+
+# 2. Update the application
+
+We will change the text displeyd for when there is no item in the list, the currente text is "No items yet! Add one above!", the new text will be "You have no todo items yet! Add one above!".
+
+- For this we are going to modify src/static/js/app.js.
+
+  Current:
+  `<p className="text-center"> No items yet! Add one above!"</p>`
+
+  Update to:
+  `<p className="text-center"> You have no todo items yet! Add one above!</p>`
+
+- Commit and push the update.
+- Pull the update on the VM.
+- Build the new image.
+  - docker build -t getting-started .
+
+![text-update](/images/update-content-push-pull-and-build-new-image.jpg)
+
+## Remove a container and Start the updated app container
+
+As the port 8080 is already alocated by the old container we have to stop and remove the old container first and then we can run the new image with the updated text.
+
+- Get the Id of the container:
+  - docker ps
+
+- Stop the container:
+  - docker stop <the-container-id>
+
+- Remove the container:
+  - docker rm <the-container-id>
+
+- Start the updated app container
+  - docker run -dp 8080:3000 getting-started
+
+![stop-remove-container](/images/stop-remove-container.jpg)
+![run-new-image-text-update](/images/run-new-image-text-update.jpg)
