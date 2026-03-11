@@ -160,3 +160,53 @@ Now that we have the new tag, we can push the image in to Ducker hub. Make sure 
 The image is now on Docker Hub, to test it we will first remove all old images, then use the shared image by pulling it from Docker Hub to run a new container.
 
 ![removed-img-pull-img-from-docker-hub](/images/remove-img-pull-img-from-docker-hub.jpg)
+
+# 4. Persist the DB
+
+Each Docker container has its own filesystem composed of multiple layers, it also contains the writable "scratch space" to create, update, and remove files, which allow them to have isolated filesystem for each container even though they are created from the same image. However, those files are lost once the container is removed and this is why the "todo list" in "getting-started-app" is empty everytime a new container is created, unless "Docker volume" is used to persist the data.
+
+The next image shows exactly how each container has its own filesystem. The command `docker run --rm alpine touch greeting.txt` starts a container with the alpine image and removes it (--rm) once it stops running, it also adds the text file called "greeting.txt". After that another container starts from the same image "alpine" with the "stat" command that looks for the "greeting.txt" but not file is found as they have its own filesystem.
+
+![individual-filesystem-for-each-container](/images/individual-filesystem-for-each-container.jpg)
+
+## Container volumes
+
+Docker provides two main mechanisms to persist the storage, we will see first how **volume mounts** work and how to use them.
+
+**Docker volumes** allow the data to be stored in directory outside the container on the host machine that is linked to the container's filesystem, so when a container is removed the data persists. This makes it possible to mount the same volume across container restarts or new containers.
+
+## Persist the todo data
+
+We will use **volume mount** to persist the todo list data for getting-started-app. The application stores the data at /etc/todos/todo.db inside container by default, while the volume mount in the host machine is managed by Docker. We are going to see how **bind mounts** work later on.
+
+## Create a volume and start the container
+
+- As **volume mount** is managed by Docker, all we have to do to create the volume is run "docker volume create" command:
+  `docker volume create todo-db`
+
+- After creating the volume, stop and remove the container as this one is not  
+  running with the persistent volume. `docker rm -f <container-id>`
+
+- To start a new container we will use the command "docker run" as we did before and add the --mount option which requires three pieces of information:
+  - type=volume (volume type)
+  - src=todo-db (volume name)
+  - target=/etc/todos (container's volume path)
+
+`docker run -dp 8080:3000 --mount type=volume,src=todo-db,target=/etc/todos getting-started`
+(remember to change the value for the "port mapping" and "name of image" accordingly)
+
+If you are using Git Bash you may use a different syntax for this command:
+
+`docker run -dp 8080:3000 --mount type=volume,src=todo-db,target=//etc/todos getting-started`
+
+You can check more Git Bash commands at:
+https://docs.docker.com/desktop/troubleshoot-and-support/troubleshoot/topics/#docker-commands-failing-in-git-bash
+
+- After running the container with the volume, open the application in your browser to add items to the todo list, after that remove and delete the container and start a new container with the volume we created to see the persistant data.
+
+- Check where Docker stores the volume running:
+  `docker volume inspect todo-db`
+
+The image below shows the creation of a volume, running a container with volume and checking where volume is stored.
+
+![persisting-data-docker-volume](/images/persisting-data-docker-volume.jpg)
