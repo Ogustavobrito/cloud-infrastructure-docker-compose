@@ -210,3 +210,88 @@ https://docs.docker.com/desktop/troubleshoot-and-support/troubleshoot/topics/#do
 The image below shows the creation of a volume, running a container with volume and checking where volume is stored.
 
 ![persisting-data-docker-volume](/images/persisting-data-docker-volume.jpg)
+
+# 5. Use bind mounts
+
+The **bind mount** is another way of sharing data from the filesystem on the host machine into the container. The difference is that we can specify the path of the file or directory to be mounted in to the container when using bind mounts, while volumes are managed by Docker in the filesystem's Docker area.
+
+A bind mount is great solution for the case where sharing data of a specific file/directory already defined in the host machine.
+
+We will see how we can use bind mounts and **nodemon** tool to watch for file changes.
+
+![mounts-bind-diagram](/images/mounts-bind-diagram.png)
+
+(Check Docker documentaion for **tmpfs mounts** - temporary filesystem in memory: https://docs.docker.com/engine/storage/tmpfs/)
+
+As volumes (named volumes) are manage by Docker we only need to provide the name of the volume when mouting, while running with bind volumes we provide the path for this data, see the following commands comparison:
+
+- Named Volume: `type=volume,src=my-volume,target=/usr/local/data`
+- Bind mount: `type=bind,src=/path/to/data,target=/usr/local/data`
+
+## Trying out bind mounts
+
+We will understand now how bind mounts work with an experiment and then use bind mounts for the getting-started-app.
+
+Note: Since this application is running on a Linux VM in Azure Cloud, Docker can access the filesystem in the host machine without the need of any configuration. Docker Desktop with WSL2 makes it possible for Docker to access the filesystem on Windows host machine, while on MacOS Docker Desktop uses a lightweight Linux VM where filesystem sharing is handled automatically, therefore if Docker is in Hyper-v mode, which is an isolated virtual machine, configuration is needed in the "File Sharing".
+
+The experiment is to run an Ubuntu container just to use bind mount and see the file created inside getting-started-app (host machine) and inside the container.
+
+- Go into getting-started-app `cd getting-started-app`
+- Run the command to start bash in an Ubuntu container with a bind mount:
+  - `docker run -it --mount type=bind,src=.,target=/src ubuntu bash`
+
+The "--mount type=bind" means the craeting of a bind mount, "src" means the source (origem) (getting-started-app), while "target" is the destination inside the container.
+
+The "-it" combines two flags:
+"-i" = interactive (container accepts input), while "-t" = tty (allocates a pseudo, allowing the interaction). This is why you will see: root@ac1237fad8db:/#.
+
+- run: `pwd` to confirm you are in the root directory of the container "/", and then `ls`, after this we move to src directory `cd src` which is the mounted directory when starting the container - linked to the host machine.
+
+- We will create a text file `touch myfile.txt` and see it will be crated in hot the host machine too.
+
+(See on the image below that the myfile.txt was deleted from the host machine and it was listed anymore in the container)
+![trying-bind-mounts-ubunto](/images/trying-bind-mounts-ubuntu.jpg)
+
+## Development Containers
+
+Bind mounts are useful for development as the development machine does not need to have all the build tools and environments installed. The container can pull dependencies and tools with one command line.
+
+- We will run the "getting-started-app" in development container with bind mounts, where we will:
+  - Mount source code into the container
+  - Install dependencies
+  - Run the app with nodemon
+
+- List containers `docker ps` and make sure there is no "getting-started" containers running, if so remove them.
+
+- Inside directory "getting-started-app" run:
+
+docker run -dp 8080:3000 \
+ -w /app --mount type=bind,src=.,target=/app \
+ node:24-alpine \
+ sh -c "npm install && npm run dev"
+
+Breakdown of the command:
+
+- `-dp 8080:3000 \` - run the container in the background and map port 8080 on the host to port 3000 in the container.
+- `-w /app` - sets the "working directory" inside the container.
+- `--mount type=bind,src=.,target=/app` - bind mount the current host directory into "/app" in the container.
+- `node:24-alpine` - the base image to use .
+- `sh -c "npm install && npm run dev"` - run a shell to install dependencies and start the dev server (nodemon).
+
+- `docker logs <container-id>` - to see the logs of
+  ![development-containers](/images/development-containers.jpg)
+
+## Developing the Application with the Development Container
+
+We will update the button text and see the change which is watched by nodemon and refreshes the UI.
+
+- In the src/static/js/app.js file (line 109), we'll change the button label "Add Item" to "Add".
+
+Two ways to test it:
+
+- Edit the file on Github (dev mode), commit and push an then "git pull" on the VM via terminal.
+- Edit the file on the VM:
+- `cd getting-started-app`
+- `nano src/static/js/app.js`
+
+After saving the change, refresh the broswer and confirm the change of button label.
