@@ -279,7 +279,8 @@ Breakdown of the command:
 - `sh -c "npm install && npm run dev"` - run a shell to install dependencies and start the dev server (nodemon).
 
 - `docker logs <container-id>` - to see the logs of
-  ![development-containers](/images/development-containers.jpg)
+
+![development-containers](/images/development-containers.jpg)
 
 ## Developing the Application with the Development Container
 
@@ -295,3 +296,7 @@ Two ways to test it:
 - `nano src/static/js/app.js`
 
 After saving the change, refresh the broswer and confirm the change of button label.
+
+Every time a change is made, the **nodemon** watches the change and reflects it into the container. After stopping the container, we can build a new image with the changes.
+
+![new-image-docker-dev-updated](/images/new-image-docker-dev-updated.jpg)
