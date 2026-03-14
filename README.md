@@ -300,3 +300,95 @@ After saving the change, refresh the broswer and confirm the change of button la
 Every time a change is made, the **nodemon** watches the change and reflects it into the container. After stopping the container, we can build a new image with the changes.
 
 ![new-image-docker-dev-updated](/images/new-image-docker-dev-updated.jpg)
+
+# 6. Multi Container Apps
+
+So far the application we run was in a single container. We will add MySQL to the stack application and the question is where the database should run?
+
+The recommended approach is that every contanier should have a single responsibility. When each proccess runs in a separate container, the application and the data base can be scaled, updated, and managed independently, otherwise, running multiple proccesse together in the same container would require a process manager, which increases complexity.
+
+## Container Networking
+
+By default, containers run in isolation and they do not know anything about others proccesses. To allow container to communicate with each other, we need to place them in the same Docker network.
+
+## Start MySQL
+
+Two ways to place a container on a network:
+
+- Assign the network when starting the container.
+- Connect an already running container to a network.
+
+For this application we will create the network first and then attach MySQL container at startup:
+
+To create the network run:
+`docker network create todo-app`
+
+Start a MySQL container and attach it to the network:
+
+docker run -d \
+ --network todo-app --network-alias mysql \
+ -v todo-mysql-data:/var/lib/mysql \
+ -e MYSQL_ROOT_PASSWORD=secret \
+ -e MYSQL_DATABASE=todos \
+ mysql:8.0
+
+(There are a few "environment variables" required to initialize the database. You can learn more about variable at: https://hub.docker.com/_/mysql/)
+
+Confirm that the database is running correctly:
+`docker exec -it <mysql-container-id> mysql -u root -p`
+
+- password: secret
+
+![docker-network](/images/docker-network.jpg)
+
+Now the database is ready to use.
+
+## Connect to MySQL
+
+Each container has its own IP address, and containers communicate to each other through these addresses when they are connected to the same network.
+
+Previously, we defined the container for database using option "--network-alias mysql", which allows Docker to resolve the hostname "mysql" in the todo-app network DNS.
+
+To look up this hostname we will use **nicolaka/netshoot** container that has a lot of useful tools for troubleshooting and debugging network container.
+
+Learn more about **nicolaka/netshoot** at: https://github.com/nicolaka/netshoot
+
+Start the netshoot container using nicolaka/netshoot image connected to the same network (todo-ap).
+
+- `docker run -it --network todo-app nicolaka/netshoot`
+
+![container-nicolaka-netshoot](/images/container-nicolaka-netshoot.jpg)
+
+Inside the container run the command `dig mysql` which is a DNS tool - it returns the IP address for the hostname "mysql"
+
+![dig-mysql](/images/dig-mysql.jpg)
+
+The application only needs to connect to the hostname "mysql" to talk to the database.
+
+## Run getting-started-app with MySQL
+
+Todo app supports a few "environment variables" that allow it to connect to MySQL:
+
+- MYSQL_HOST - the hostname for the running MySQL server
+- MYSQL_USER - the username for the connection
+- MYSQL_PASSWORD - the password for the connection
+- MYSQL_DB - the database to use once connected
+
+Note: Env vars are accepted for development, but they are not recommended for storing sensitive data in production. Instead, container orchestration framework should be used. Learn more about it at: https://blog.diogomonica.com/2017/03/27/why-you-shouldnt-use-env-variables-for-secret-data/
+
+## Run the Application
+
+To run the application, first go in to the "getting-started-app" directory and then add the previous environment variables, as the image shows. See that after starting the container we can inspect the logs with the command `docker logs -f <container-id>` and confirm its connected with MySQL.
+
+![run-app-with-mysql](/images/run-app-with-mysql.jpg)
+
+## Verify that data is stored in MySQL
+
+Now the the container running and connected to the database, we can add items in the Todo List in browser. Then confirm that the data is stored in the "todos database" using the command:
+`docker exec -it <mysql-container-id> mysql -p todos`
+
+Inside MySQL:
+
+`mysql> select * from todo_items;`
+
+![todo-items-on-mysql-data-base](/images/todo-items-on-mysql-data-base.jpg)
