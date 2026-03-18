@@ -2,11 +2,11 @@
 
 ## What is this repository?
 
-This repository holds the documentation and source files for the assignment of **Cloud Infrastructure and Virtualisation** module. In this assignment the objective is to follow the official Docker documentation guide in order to implement a containerised application environment.
+This repository holds the documentation and source files for the assignment of ** B8IS003 Cloud Infrastructure and Virtualisation (B8IS003_2526_TMD2)** module - Dublin Business School. In this assignment the objective is to follow the official Docker documentation guide in order to implement a containerised application environment.
 
 ## What is implemented in this project?
 
-In this project you will see how Docker can be used to build and run containers within a **Linux Virtual Machine** in Azure cloud and illustrate the use of cloud infrastrucure and virtualisation.
+In this project you will see how Docker can be used to build and run containers within a **Linux Virtual Machine** in Azure cloud and illustrate the use of cloud infrastructure and virtualisation.
 
 All the instruction to make a deployment of **multiple containers using Docker Compose** is provided by Docker Documentation, demonstrating how a containerised environment can be used to define, deploy, and manage multiple services together.
 
@@ -57,7 +57,7 @@ After running the command, log out and log in again for the group membership to 
 
 Containerization is a software deployment process that bundles an application's code with all the files and libraries it needs to run on any infrastructure.
 
-In this section we are going to run a todo list manager provided by Docker that runs on Node.js.
+In this section we are going to run a Todo List manager provided by Docker that runs on Node.js.
 
 ## Get The APP
 
@@ -69,11 +69,11 @@ https://github.com/docker/getting-started-app/tree/main
 
 ## Build the app's image
 
-1. We use Dockerfile to build the image. Dockerfile is blue-print that holds a script of instructions such as, the base of image (e.g. node:24-alpine), sets the working directory, copy source code into the image, dependencies, commands to start the application and port por the application. Docker uses this script to build a container image.
+1. We use Dockerfile to build the image. Dockerfile is blue-print that holds a script of instructions such as, the base of image (e.g. node:24-alpine), sets the working directory, copy source code into the image, dependencies, commands to start the application and port for the application. Docker uses this script to build a container image.
 
-- Go to the repository, change the browser to "dev mode" to make it possible to modifiy and commit the Dockerfile we will create.
+- Go to the repository, change the browser to "dev mode" to make it possible to modify and commit the Dockerfile we will create.
 
-- insede Getting-started-app folder, create a file called "Dockerfile" and paste the text:
+- inside Getting-started-app folder, create a file called "Dockerfile" and paste the text:
 
 ![dockerfile](/images/dockerfile.jpg)
 
@@ -81,13 +81,13 @@ https://github.com/docker/getting-started-app/tree/main
 
 2. Build the image
 
-- Building the images is the process of wrapping the instructions from Dockerfile such as, dependencies and the enviroment into the appliction.
+- Building the images is the process of wrapping the instructions from Dockerfile such as, dependencies and the environment into the application.
 
-- Navigate to the directory where dockerfile is located:
+- Navigate to the directory where Dockerfile is located:
   - cd getting-started-app
 - Build the image running:
   - docker build -t getting-started .
-  - -t command tags the image with following name and the dot means it uses the dockerfile in the current directory (.).
+  - -t command tags the image with following name and the dot means it uses the Dockerfile in the current directory (.).
 
 ## Start an app container
 
@@ -105,7 +105,7 @@ Use the command "docker run" to run a container:
 
 # 2. Update the application
 
-We will change the text displayed for when there is no item in the list, the currente text is "No items yet! Add one above!", the new text will be "You have no todo items yet! Add one above!".
+We will change the text displayed for when there is no item in the list, the current text is "No items yet! Add one above!", the new text will be "You have no todo items yet! Add one above!".
 
 - For this we are going to modify src/static/js/app.js.
 
@@ -143,7 +143,7 @@ As the port 8080 is already allocated by the old container we have to stop and r
 
 # 3. Share the application
 
-We can share a Docker image by using docker registry. Docker Hub is the defualt registry, where we can create repositories and share the application. Lets share the image created on step 2.
+We can share a Docker image by using docker registry. Docker Hub is the default registry, where we can create repositories and share the application. Let's share the image created on step 2.
 
 ## Create a repository
 
@@ -163,7 +163,7 @@ The image is now on Docker Hub, to test it we will first remove all old images, 
 
 # 4. Persist the DB
 
-Each Docker container has its own filesystem composed of multiple layers, it also contains the writable "scratch space" to create, update, and remove files, which allow them to have isolated filesystem for each container even though they are created from the same image. However, those files are lost once the container is removed and this is why the "todo list" in "getting-started-app" is empty everytime a new container is created, unless "Docker volume" is used to persist the data.
+Each Docker container has its own filesystem composed of multiple layers, it also contains the writable "scratch space" to create, update, and remove files, which allow them to have isolated filesystem for each container even though they are created from the same image. However, those files are lost once the container is removed and this is why the "todo list" in "getting-started-app" is empty every time a new container is created, unless "Docker volume" is used to persist the data.
 
 The next image shows exactly how each container has its own filesystem. The command `docker run --rm alpine touch greeting.txt` starts a container with the alpine image and removes it (--rm) once it stops running, it also adds the text file called "greeting.txt". After that another container starts from the same image "alpine" with the "stat" command that looks for the "greeting.txt" but not file is found as they have its own filesystem.
 
@@ -202,7 +202,7 @@ If you are using Git Bash you may use a different syntax for this command:
 You can check more Git Bash commands at:
 https://docs.docker.com/desktop/troubleshoot-and-support/troubleshoot/topics/#docker-commands-failing-in-git-bash
 
-- After running the container with the volume, open the application in your browser to add items to the todo list, after that remove and delete the container and start a new container with the volume we created to see the persistant data.
+- After running the container with the volume, open the application in your browser to add items to the todo list, after that remove and delete the container and start a new container with the volume we created to see the persistent data.
 
 - Check where Docker stores the volume running:
   `docker volume inspect todo-db`
@@ -221,9 +221,9 @@ We will see how we can use bind mounts and **nodemon** tool to watch for file ch
 
 ![mounts-bind-diagram](/images/mounts-bind-diagram.png)
 
-(Check Docker documentaion for **tmpfs mounts** - temporary filesystem in memory: https://docs.docker.com/engine/storage/tmpfs/)
+(Check Docker documentation for **tmpfs mounts** - temporary filesystem in memory: https://docs.docker.com/engine/storage/tmpfs/)
 
-As volumes (named volumes) are manage by Docker we only need to provide the name of the volume when mouting, while running with bind volumes we provide the path for this data, see the following commands comparison:
+As volumes (named volumes) are manage by Docker we only need to provide the name of the volume when mounting, while running with bind volumes we provide the path for this data, see the following commands comparison:
 
 - Named Volume: `type=volume,src=my-volume,target=/usr/local/data`
 - Bind mount: `type=bind,src=/path/to/data,target=/usr/local/data`
@@ -240,7 +240,7 @@ The experiment is to run an Ubuntu container just to use bind mount and see the 
 - Run the command to start bash in an Ubuntu container with a bind mount:
   - `docker run -it --mount type=bind,src=.,target=/src ubuntu bash`
 
-The "--mount type=bind" means the craeting of a bind mount, "src" means the source (origem) (getting-started-app), while "target" is the destination inside the container.
+The "--mount type=bind" means the creating of a bind mount, "src" means the source (origem) (getting-started-app), while "target" is the destination inside the container.
 
 The "-it" combines two flags:
 "-i" = interactive (container accepts input), while "-t" = tty (allocates a pseudo, allowing the interaction). This is why you will see: root@ac1237fad8db:/#.
@@ -295,7 +295,7 @@ Two ways to test it:
 - `cd getting-started-app`
 - `nano src/static/js/app.js`
 
-After saving the change, refresh the broswer and confirm the change of button label.
+After saving the change, refresh the browser and confirm the change of button label.
 
 Every time a change is made, the **nodemon** watches the change and reflects it into the container. After stopping the container, we can build a new image with the changes.
 
@@ -305,11 +305,11 @@ Every time a change is made, the **nodemon** watches the change and reflects it 
 
 So far the application we run was in a single container. We will add MySQL to the stack application and the question is where the database should run?
 
-The recommended approach is that every contanier should have a single responsibility. When each proccess runs in a separate container, the application and the data base can be scaled, updated, and managed independently, otherwise, running multiple proccesse together in the same container would require a process manager, which increases complexity.
+The recommended approach is that every container should have a single responsibility. When each process runs in a separate container, the application and the data base can be scaled, updated, and managed independently, otherwise, running multiple processes together in the same container would require a process manager, which increases complexity.
 
 ## Container Networking
 
-By default, containers run in isolation and they do not know anything about others proccesses. To allow container to communicate with each other, we need to place them in the same Docker network.
+By default, containers run in isolation and they do not know anything about others processes. To allow container to communicate with each other, we need to place them in the same Docker network.
 
 ## Start MySQL
 
@@ -392,3 +392,78 @@ Inside MySQL:
 `mysql> select * from todo_items;`
 
 ![todo-items-on-mysql-data-base](/images/todo-items-on-mysql-data-base.jpg)
+
+# 7. Use Docker Compose
+
+**Docker Compose** is used to define and share multi-container applications by writing a YAML file with all services. It allows us to run or tear down the application with a single command line.
+
+The YAML file is generally created in the root of the application which is version controlled and easy to run.
+
+## Create the Compose file
+
+Inside "getting-started-app" directory, we will create a file named "compose.yaml".
+
+## Define the app service
+
+These are the commands we used to run multi-container application in "part 6".
+
+docker run -dp 8080:3000 \
+ -w /app -v ".:/app" \
+ --network todo-app \
+ -e MYSQL_HOST=mysql \
+ -e MYSQL_USER=root \
+ -e MYSQL_PASSWORD=secret \
+ -e MYSQL_DB=todos \
+ node:24-alpine \
+ sh -c "npm install && npm run dev"
+
+They will be defined in the "compose.yaml" file.
+
+1. Start by defining the "name"(app:) and the "image:" of the first service or container. The name will become automatically a network alias (useful to define MySQL service).
+
+2. Add the "command:" to install dependencies and run the application.
+
+3. Define the "ports:" (8080:3000)
+
+4. Define the working directory "-w /app" and volume mapping "-v: "./:/app"" by using "working_dir:" and "volumes:" definitions.
+
+5. Define the environment variables by using "environment:" key.
+
+![define-services-name-image-command-ports-wdir-volumes-env](/images/define-services-name-image-command-ports-wdir-volumes-env.jpg)
+
+## Define MySQL service
+
+Previous command used to run MySQL container:
+
+docker run -d \
+ --network todo-app --network-alias mysql \
+ -v todo-mysql-data:/var/lib/mysql \
+ -e MYSQL_ROOT_PASSWORD=secret \
+ -e MYSQL_DATABASE=todos \
+ mysql:8.0
+
+1. Define the new service and name it "mysql" (it will be the network alias). Also define the image "mysql:8.0".
+
+2. Define volume mapping. In Docker Compose, we need to declare the named volume at the global level and reference it inside the service so when the application starts Docker will create the volume automatically.
+
+3. Define environment variables.
+
+![define-mysql-service-compose-file](/images/define-mysql-service-docker-compose-file.jpg)
+
+When the compose file is ready, commit and push it, and then pull to the VM.
+
+![git-pull-compose-file](/images/git-pull-compose-file.jpg)
+
+## Run the application stack
+
+Before running, make sure there is no other copies of containers running. List containers using `docker ps` and remove them using `docker rm -f <ids>`.
+
+Start the application stack running `docker compose up` and add -d to run in the background.
+
+Check the logs using `docker compose logs -f` command.|
+
+- It shows logs in real time for all services(app or MySQL), making it easier to identify connection issues.
+
+Note that Docker creates the "network" automatically, allowing services to communicate with each other using the services names as hostnames, this is why we did not define it in the compose file.
+
+![run-with-docker-compose](/images/run-with-docker-compose.jpg)
