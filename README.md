@@ -1,23 +1,17 @@
 # Virtualized Cloud Deployment with Docker Compose
 
-## What is this repository?
+## Overview
 
-This repository holds the documentation and source files for the assignment of ** B8IS003 Cloud Infrastructure and Virtualisation (B8IS003_2526_TMD2)** module - Dublin Business School. In this assignment the objective is to follow the official Docker documentation guide in order to implement a containerised application environment.
+This repository holds the documentation for the assignment of ** B8IS003 Cloud Infrastructure and Virtualisation (B8IS003_2526_TMD2)** module - Dublin Business School.
 
-## What is implemented in this project?
+In this assignment the objective is to follow the official Docker documentation guide to demonstrate the implementation of a containerised application using Docker in a cloud-based virtualised environment.
 
-In this project you will see how Docker can be used to build and run containers within a **Linux Virtual Machine** in Azure cloud and illustrate the use of cloud infrastructure and virtualisation.
-
-All the instruction to make a deployment of **multiple containers using Docker Compose** is provided by Docker Documentation, demonstrating how a containerised environment can be used to define, deploy, and manage multiple services together.
-
-## What is included in this repository?
-
-The repository includes:
-
-- Docker configuration files
-- Docker Compose configuration for multi-container deployment
-- Documentation describing the setup and deployment process
-- Instructions to reproduce the environment on a cloud virtual machine
+- Containerisation using Docker
+- Deploy application in a virtual machina
+- Share the application via Docker Hub
+- Demonstrate data persistence using Docker Volumes
+- Container Network
+- Multi-container applications using Docker Compose
 
 ---
 
@@ -36,8 +30,8 @@ The repository includes:
   - Install Docker using apt:
   - https://docs.docker.com/engine/install/ubuntu
 - Access to the **terminal / SSH connection**
-- **Docker Account** for sharing application
-- **Git** (optional, for cloning the repository)
+- **Docker Hub Account** to share images
+- **Git**
 
 The image below shows that we are now connected to a Virtual Machine in Azure Cloud via SSH. SSH can be generated on terminal using the command "ssh-keygen", which generate private and public keys, the public key is the one we register on the VM and the private key is the one we use to access the VM.
 
@@ -69,7 +63,7 @@ https://github.com/docker/getting-started-app/tree/main
 
 ## Build the app's image
 
-1. We use Dockerfile to build the image. Dockerfile is blue-print that holds a script of instructions such as, the base of image (e.g. node:24-alpine), sets the working directory, copy source code into the image, dependencies, commands to start the application and port for the application. Docker uses this script to build a container image.
+1. We use Dockerfile to build the image. Dockerfile is a blue-print that holds a script of instructions such as, the base of image (e.g. node:24-alpine), sets the working directory, copy source code into the image, dependencies, commands to start the application and port for the application. Docker uses this script to build a container image.
 
 - Go to the repository, change the browser to "dev mode" to make it possible to modify and commit the Dockerfile we will create.
 
@@ -153,7 +147,7 @@ To push an image in to Docker Hub we need to tag the image with Docker ID + repo
 run:
 `docker tag getting-started:latest <docker-id>/getting-started:<newtag>`
 
-Now that we have the new tag, we can push the image in to Ducker hub. Make sure to log in (access token ca be generate on Docker Hub account settings).
+Now that we have the new tag, we can push the image in to Ducker hub repository, but first make sure to log in using the command "docker login". (access token ca be generate on Docker Hub portal account settings).
 
 ![dockerhub-new-tag-for-sharing-image](/images/new-tag-for-sharing-image.jpg)
 
@@ -240,10 +234,12 @@ The experiment is to run an Ubuntu container just to use bind mount and see the 
 - Run the command to start bash in an Ubuntu container with a bind mount:
   - `docker run -it --mount type=bind,src=.,target=/src ubuntu bash`
 
-The "--mount type=bind" means the creating of a bind mount, "src" means the source (origem) (getting-started-app), while "target" is the destination inside the container.
+The "--mount type=bind" means craetes a bind mount, "src" means the source (origem - host machine), while "target" is the destination inside the container.
 
 The "-it" combines two flags:
-"-i" = interactive (container accepts input), while "-t" = tty (allocates a pseudo, allowing the interaction). This is why you will see: root@ac1237fad8db:/#.
+"-i" = interactive (container accepts input), while "-t" = tty (allocates a pseudo terminal session, allowing the interaction). This is why you will see: root@ac1237fad8db:/#.
+
+"Ubunto bash" means that Docker starts an Ubunto container and runs "bash".
 
 - run: `pwd` to confirm you are in the root directory of the container "/", and then `ls`, after this we move to src directory `cd src` which is the mounted directory when starting the container - linked to the host machine.
 
@@ -467,3 +463,9 @@ Check the logs using `docker compose logs -f` command.|
 Note that Docker creates the "network" automatically, allowing services to communicate with each other using the services names as hostnames, this is why we did not define it in the compose file.
 
 ![run-with-docker-compose](/images/run-with-docker-compose.jpg)
+
+## Conclusion
+
+In this assignment we demonstrated how Docker can be used to containerise applications and deploy them in a cloud-based virtual environment. Multi-containers were managed by using Docker Compose, improving scalability and maintainability.
+
+The use of volumes for data persistence. Container networking enabled communication between container where each container followed a single responsability, reflecting best practices for deployment.
