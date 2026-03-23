@@ -75,7 +75,7 @@ https://github.com/docker/getting-started-app/tree/main
 
 2. Build the image
 
-- Building the images is the process of wrapping the instructions from Dockerfile such as, dependencies and the environment into the application.
+- Building the images is the process of combining the instructions from Dockerfile such as, dependencies and the environment variables into a sigle image that encapsulates the application.
 
 - Navigate to the directory where Dockerfile is located:
   - cd getting-started-app
